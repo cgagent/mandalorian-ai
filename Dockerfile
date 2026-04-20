@@ -1,5 +1,6 @@
+ARG FLY_REGISTRY
 # Build stage
-FROM node:20-alpine as build
+FROM ${FLY_REGISTRY}/docker/node:20-alpine as build
 
 WORKDIR /app
 
@@ -17,7 +18,8 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM nginx:alpine
+ARG FLY_REGISTRY
+FROM ${FLY_REGISTRY}/docker/nginx:alpine
 
 # Copy built assets from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
